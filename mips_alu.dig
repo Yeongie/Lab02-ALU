@@ -150,7 +150,7 @@
         </entry>
         <entry>
           <string>CodeFile</string>
-          <file>C:\Users\allan\source\repos\Lab02-ALU\alu_control.v</file>
+          <file>./alu_control.v</file>
         </entry>
       </elementAttributes>
       <pos x="380" y="300"/>
@@ -184,7 +184,7 @@
         </entry>
         <entry>
           <string>CodeFile</string>
-          <file>C:\Users\allan\source\repos\Lab02-ALU\alu.v</file>
+          <file>./alu.v</file>
         </entry>
       </elementAttributes>
       <pos x="600" y="320"/>

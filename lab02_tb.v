@@ -16,20 +16,21 @@
 `timescale 1ns / 1ps
 
 module myalu_tb;
-    parameter NUMBITS = 8;
+    parameter NUMBITS = 32;
 
     // Inputs
     reg clk;
     reg reset;
     reg [NUMBITS-1:0] A;
     reg [NUMBITS-1:0] B;
-    reg [2:0] opcode;
-
+    reg [1:0] alu_op;
+    reg [5:0] instr_5_0;
+    
+    
     // Outputs
     wire [NUMBITS-1:0] result;
     reg [NUMBITS-1:0] expected_result;
-    wire carryout;
-    wire overflow;
+    wire [3:0] alu_contr;
     wire zero;
 
 
@@ -38,22 +39,25 @@ module myalu_tb;
     // -------------------------------------------------------
     initial
     begin
-        $dumpfile("lab01.vcd");
+        $dumpfile("lab02.vcd");
         $dumpvars(0);
     end
 
     // -------------------------------------------------------
     // Instantiate the Unit Under Test (UUT)
     // -------------------------------------------------------
-    myalu #(.NUMBITS(NUMBITS)) uut (
-        .clk(clk),
-        .reset(reset) ,  
+
+    alu_control control(
+        .alu_op(alu_op),
+        .funct(instr_5_0),
+        .alu_control(alu_contr)
+    );
+
+    alu uut (
+        .alu_control(alu_contr),
         .A(A), 
         .B(B), 
-        .opcode(opcode), 
         .result(result), 
-        .carryout(carryout), 
-        .overflow(overflow), 
         .zero(zero)
     );
 
@@ -72,6 +76,33 @@ module myalu_tb;
     integer totalTests = 0;
     integer failedTests = 0;
     
+    task test_case(
+        input [1:0] alu_op_val, 
+        input [5:0] instr_5_0_val,
+        input [NUMBITS-1:0] A_val,
+        input [NUMBITS-1:0] B_val,
+        input expected_zero_val,
+        input [NUMBITS-1:0] expected_result_val);
+        begin
+            totalTests = totalTests + 1;
+            alu_op = alu_op_val;
+            instr_5_0 = instr_5_0_val;
+            A = A_val;
+            B = B_val;
+            expected_result = expected_result_val;
+
+            #100; // Wait 
+            if (expected_result !== result || zero !== expected_zero_val) begin
+                $write("failed\n");
+                failedTests = failedTests + 1;
+            end else begin
+                $write("passed\n");
+            end
+            #10; // Wait 
+        end
+
+    endtask
+
     initial begin // Test suite
         // Reset
         @(negedge reset); // Wait for reset to be released (from another initial block)
@@ -82,82 +113,12 @@ module myalu_tb;
         // ---------------------------------------------
         // Testing unsigned additions 
         // --------------------------------------------- 
-        $write("Test Group 1: Testing unsigned additions ... \n");
-        opcode = 3'b000;
 
         // Code necessary for each test case 
-        totalTests = totalTests + 1;
-        $write("\tTest Case 1.1: Unsigned Add ... ");
-        A = 8'hFF;
-        B = 8'h01;
-        expected_result = 8'h00;
+        $write("\tTest Case 1: And ... ");
+        test_case(2, 6'h24, 32'h1111, 32'hffff, 1'b0, 32'h1111);
 
-        #100; // Wait 
-        if (expected_result !== result || zero !== 1'b1 || carryout !== 1'b1) begin
-            $write("failed\n");
-            failedTests = failedTests + 1;
-        end else begin
-            $write("passed\n");
-        end
-        #10; // Wait 
-        
-		// Add more tests here
-
-        // ---------------------------------------------
-        // Testing unsigned subs 
-        // --------------------------------------------- 
-        $write("Test Group 2: Testing unsigned subs ...\n");
-        opcode = 3'b010; 
-        
-		// Add more tests here
-
-        // ---------------------------------------------
-        // Testing signed adds 
-        // --------------------------------------------- 
-        $write("Test Group 3: Testing signed adds ...\n");
-        opcode = 3'b001; 
-
-		// Add more tests here
-
-        // ---------------------------------------------
-        // Testing signed subs 
-        // --------------------------------------------- 
-        $write("Test Group 4: Testing signed subs ...\n");
-        opcode = 3'b011; 
-                
-		// Add more tests here
-
-        // ---------------------------------------------
-        // Testing ANDS 
-        // --------------------------------------------- 
-        $write("Test Group 5: Testing ANDs ...\n");
-        opcode = 3'b100; 
-                
-		// Add more tests here
-
-        // ----------------------------------------
-        // ORs 
-        // ---------------------------------------- 
-        $write("Test Group 6: Testing ORs ...\n");
-        opcode = 3'b101; 
-        
-		// Add more tests here
-        
-        // ----------------------------------------
-        // XORs 
-        // ---------------------------------------- 
-        $write("Test Group 7: Testing XORs ...\n");
-        opcode = 3'b110; 
-        
-		// Add more tests here
-        
-        // ----------------------------------------
-        // Div 2 
-        // ----------------------------------------
-        $write("Test Group 8: Testing DIV 2 ...\n");
-        opcode = 3'b111; 
-        
-		// Add more tests here
+        // Copy the code above and change params to do tests from table        
 
         // -------------------------------------------------------
         // End testing

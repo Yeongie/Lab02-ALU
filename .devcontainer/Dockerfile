@@ -1,4 +1,4 @@
-ROM ubuntu:latest
+FROM ubuntu:latest
 
 RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=US/LosAngeles apt install -y verilog git gtkwave wget unzip openjdk-21-jre
 

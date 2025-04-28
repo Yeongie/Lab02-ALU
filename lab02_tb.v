@@ -4,8 +4,8 @@
 // Email: ilee002@ucr.edu
 // 
 // Assignment name: Lab02 ALU
-// Lab section: 
-// TA: 
+// Lab section: 21
+// TA: Sakshar Chakravarty
 // 
 // I hereby certify that I have not received assistance on this assignment,
 // or used code, from ANY outside source other than the instruction team

@@ -1,31 +1,51 @@
 # Lab 02 Report — MIPS ALU
+# Isaac Lee, ilee002@ucr.edu
 
 ## 1. Test Cases (Decimal)
 
-| Test | alu_op | instr (funct) | A (decimal) | B (decimal) | zero | result (decimal) |
-|------|--------|---------------|-------------|-------------|------|------------------|
-| T1   | 2      | 36            | 4369        | 65535       | 0    | 4369             |
-| T2   | 2      | 36            | 0           | 65535       | 1    | 0                |
-| T3   | 2      | 37            | 4369        | 65535       | 0    | 65535            |
-| T4   | 2      | 37            | 0           | 0           | 1    | 0                |
-| T5   | 2      | 32            | 1           | 65535       | 0    | 65536            |
-| T6   | 2      | 32            | 4369        | 65535       | 0    | 69904            |
-| T7   | 2      | 32            | 1           | –1          | 1    | 0                |
-| T8   | 2      | 32            | 1           | –2          | 0    | –1               |
-| T9   | 2      | 34            | 1           | –1          | 0    | 2                |
-| T10  | 2      | 34            | –1          | 1           | 0    | –2               |
-| T11  | 2      | 34            | –1          | –1          | 1    | 0                |
-| T12  | 2      | 34            | 1           | 1           | 1    | 0                |
-| T13  | 2      | 42            | 2           | 2           | 1    | 0                |
-| T14  | 2      | 42            | 2           | 1           | 1    | 0                |
-| T15  | 2      | 42            | 1           | 2           | 0    | 1                |
-| T16  | 2      | 42            | –1          | 1           | 0    | 1                |
-| T17  | 2      | 42            | 1           | –1          | 1    | 0                |
-| T18  | 2      | 39            | 4369        | 65535       | 0    | –65536           |
-| T19  | 2      | 39            | 0           | 0           | 0    | –1               |
-| T20  | 0      | 39            | 1           | 65535       | 0    | 65536            |
-| T21  | 1      | 42            | 65535       | 1           | 0    | 65534            |
-| T22  | 1      | 36            | 1           | 1           | 1    | 0                |
+T1: alu_op=2, instr (funct)=36, A=4369, B=65535 → zero=0, result=4369
+
+T2: alu_op=2, instr=36, A=0, B=65535 → zero=1, result=0
+
+T3: alu_op=2, instr=37, A=4369, B=65535 → zero=0, result=65535
+
+T4: alu_op=2, instr=37, A=0, B=0 → zero=1, result=0
+
+T5: alu_op=2, instr=32, A=1, B=65535 → zero=0, result=65536
+
+T6: alu_op=2, instr=32, A=4369, B=65535 → zero=0, result=69904
+
+T7: alu_op=2, instr=32, A=1, B=-1 → zero=1, result=0
+
+T8: alu_op=2, instr=32, A=1, B=-2 → zero=0, result=-1
+
+T9: alu_op=2, instr=34, A=1, B=-1 → zero=0, result=2
+
+T10: alu_op=2, instr=34, A=-1, B=1 → zero=0, result=-2
+
+T11: alu_op=2, instr=34, A=-1, B=-1 → zero=1, result=0
+
+T12: alu_op=2, instr=34, A=1, B=1 → zero=1, result=0
+
+T13: alu_op=2, instr=42, A=2, B=2 → zero=1, result=0
+
+T14: alu_op=2, instr=42, A=2, B=1 → zero=1, result=0
+
+T15: alu_op=2, instr=42, A=1, B=2 → zero=0, result=1
+
+T16: alu_op=2, instr=42, A=-1, B=1 → zero=0, result=1
+
+T17: alu_op=2, instr=42, A=1, B=-1 → zero=1, result=0
+
+T18: alu_op=2, instr=39, A=4369, B=65535 → zero=0, result=-65536
+
+T19: alu_op=2, instr=39, A=0, B=0 → zero=0, result=-1
+
+T20: alu_op=0, instr=39, A=1, B=65535 → zero=0, result=65536
+
+T21: alu_op=1, instr=42, A=65535, B=1 → zero=0, result=65534
+
+T22: alu_op=1, instr=36, A=1, B=1 → zero=1, result=0
 
 
 ## 2. Issues & Fixes

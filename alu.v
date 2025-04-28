@@ -37,19 +37,29 @@
 `define WORD_SIZE 32 
 
 module alu (
-    input wire [3:0] alu_control,  
-    input wire [`WORD_SIZE-1:0] A,
-    input wire [`WORD_SIZE-1:0] B, 
-    output reg zero, 
-    output reg [`WORD_SIZE-1:0] result
+    input  [3:0] alu_control,  // ALU control from alu_control.v
+    input  [31:0] A,           // Operand A
+    input  [31:0] B,           // Operand B
+    output reg [31:0] result,  // Result
+    output reg        zero     // Zero flag
 );
 
 // ---------------------------------------------------------
 // Implementation of MIPS ALU 
 // --------------------------------------------------------- 
 
-always @(alu_control or A or B) begin
-    // Put our code here
-end 
+
+    always @(*) begin
+        case (alu_control)
+            4'b0000: result = A & B;                   // AND
+            4'b0001: result = A | B;                   // OR
+            4'b0010: result = A + B;                   // ADD
+            4'b0110: result = A - B;                   // SUB
+            4'b0111: result = ($signed(A) < $signed(B)) ? 32'd1 : 32'd0; //signed SLT
+            4'b1100: result = ~(A | B);                // NOR
+            default: result = 32'b0;                   // shouldn't happen
+        endcase
+        zero = (result == 32'b0);
+    end
 
 endmodule
